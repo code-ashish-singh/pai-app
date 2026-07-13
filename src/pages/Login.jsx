@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
-import { User } from 'lucide-react'
+import { User, Mail, Camera, Check } from 'lucide-react'
 
 export default function Login() {
   const { setProfile } = useApp()
@@ -9,6 +9,7 @@ export default function Login() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [photo, setPhoto] = useState(null)
+  const [remember, setRemember] = useState(false)
 
   function handlePhoto(e) {
     const file = e.target.files?.[0]
@@ -26,54 +27,85 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center px-6 bg-base-900">
+    <div className="min-h-screen flex flex-col justify-center px-8 bg-[#181824] font-sans">
       <div className="max-w-sm mx-auto w-full">
-        <h1 className="text-2xl font-semibold text-white mb-1">Welcome</h1>
-        <p className="text-white/50 text-sm mb-8">
-          Set up your local profile. Nothing leaves this device.
-        </p>
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-[32px] font-bold text-white mb-2 tracking-tight">Welcome</h1>
+          <p className="text-white/60 text-sm">
+            Hi, it's time for you to sign in.
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <label className="flex flex-col items-center gap-2 mb-2 cursor-pointer">
-            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-white/10">
-              {photo ? (
-                <img src={photo} alt="profile" className="w-full h-full object-cover" />
-              ) : (
-                <User className="text-white/30" size={28} />
-              )}
-            </div>
-            <span className="text-xs text-accent-purple">Add photo</span>
-            <input type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
-          </label>
+          
+          {/* Photo Upload (Optional but kept for local profile logic) */}
+          <div className="flex justify-center mb-2">
+            <label className="relative cursor-pointer group">
+              <div className="w-20 h-20 rounded-full bg-[#1f1f2e] flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-[#5858d6] transition-colors shadow-lg">
+                {photo ? (
+                  <img src={photo} alt="profile" className="w-full h-full object-cover" />
+                ) : (
+                  <Camera className="text-white/30" size={24} />
+                )}
+              </div>
+              <input type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
+            </label>
+          </div>
 
-          <div>
-            <label className="text-xs text-white/50 mb-1 block">Name</label>
+          {/* Name Field */}
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <User size={18} className="text-white/40" />
+            </div>
             <input
+              required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 outline-none focus:border-accent-purple"
-              required
+              placeholder="Name"
+              className="w-full bg-[#1f1f2e] text-white text-sm rounded-2xl pl-11 pr-4 py-4 outline-none focus:ring-1 focus:ring-[#5858d6] transition-shadow placeholder-white/40"
             />
           </div>
 
-          <div>
-            <label className="text-xs text-white/50 mb-1 block">Email (optional)</label>
+          {/* Email Field */}
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Mail size={18} className="text-white/40" />
+            </div>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 outline-none focus:border-accent-purple"
+              placeholder="Email"
+              className="w-full bg-[#1f1f2e] text-white text-sm rounded-2xl pl-11 pr-4 py-4 outline-none focus:ring-1 focus:ring-[#5858d6] transition-shadow placeholder-white/40"
             />
           </div>
 
+          {/* Options row */}
+          <div className="flex items-center justify-between text-xs px-1 pt-2 pb-2">
+            <label className="flex items-center gap-2 cursor-pointer" onClick={() => setRemember(!remember)}>
+              <div className={`w-[18px] h-[18px] rounded-[5px] border flex items-center justify-center transition-colors ${remember ? 'bg-[#5858d6] border-[#5858d6]' : 'border-white/20 bg-transparent'}`}>
+                 {remember && <Check size={12} className="text-white" />}
+              </div>
+              <span className="text-white/50">Remember me</span>
+            </label>
+            <button type="button" className="text-white/80 font-medium hover:text-white transition-colors">
+              Forgot Password
+            </button>
+          </div>
+
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-accent-purple text-white font-medium rounded-xl py-3 mt-4 active:scale-[0.98] transition-transform"
+            className="w-full bg-[#4a4ac2] hover:bg-[#5858d6] text-white font-semibold rounded-2xl py-4 mt-4 active:scale-[0.98] transition-all shadow-lg shadow-[#4a4ac2]/20"
           >
-            Get started
+            Sign in
           </button>
+          
+          {/* Footer Link */}
+          <p className="text-center text-xs text-white/50 mt-6">
+            Don't have an account? <button type="button" className="text-[#6b6bff] font-medium hover:underline ml-1">Register</button>
+          </p>
         </form>
       </div>
     </div>
